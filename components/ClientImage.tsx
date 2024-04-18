@@ -10,5 +10,11 @@ export default function ClientImage({
   imageComponent: StaticImageData | string
   description: string
 }) {
-  return <Image src={imageComponent} alt={description} className="h-auto w-auto" />
+  return (
+    <Image
+      src={`/portfolio${typeof imageComponent === 'string' ? imageComponent : imageComponent.src}`}
+      alt={description}
+      className="h-auto w-auto"
+    />
+  )
 }
