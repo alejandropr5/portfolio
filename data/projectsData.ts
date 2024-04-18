@@ -21,6 +21,13 @@ const projectsData: Project[] = [
     href: 'https://gencipher.vercel.app/',
   },
   {
+    title: 'Briefly',
+    description: `AI-powered audio briefly transcriptions.
+    Seamlessly transform spoken words into written insights with AI-enhanced audio transcriptions.`,
+    imgSrc: '/static/images/briefly.png',
+    href: '/blog/briefly-ai-powered-audio-briefly-transcriptions',
+  },
+  {
     title: 'TheMonetPost',
     description: `The Monet Post, the cozy corner of the internet where we explore the
     fascinating ties between the past and the present, all through the curious lens of a
