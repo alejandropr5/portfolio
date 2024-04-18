@@ -1,0 +1,56 @@
+---
+title: 'Briefly: AI-powered audio briefly transcriptions'
+date: '2024-04-17'
+lastmod: '2024-04-17'
+tags: ['PLN', 'AI', 'audio', 'feature']
+draft: false
+summary: 'Release of Tailwind Nextjs Starter Blog template v2.0, refactored with Nextjs App directory and React Server Components setup.Discover the new features and how to migrate from V1.'
+images: ['/static/images/twitter-card.png']
+---
+
+## Introduction
+
+In educational, work or personal environments, we often face the difficulty of managing long audios, such as classes or meetings, whose content exceeds our available time to listen to them in their entirety. This results in a loss of valuable information and can affect the comprehensive understanding of the subject matter. “Briefly” addresses this problem by offering an effective solution that allows users to receive audio files, accurately transcribe them, and then generate automatic summaries.
+
+The app uses OpenAI's Whisper to perform high-quality transcriptions, ensuring accurate representation of spoken content in audio files. It then uses the Transformer T5 model to generate concise but informative summaries, capturing key points and highlighting essential information.
+
+<TOCInline toc={props.toc} exclude="Introduction" />
+
+## Used models
+
+### Whisper
+
+Whisper is a model developed by OpenAI designed specifically to perform audio transcription tasks. Its architecture consists of an encoder-decoder transformer that takes audio log-Mel spectrograms as input.
+
+![Whisper Structure](/static/images/whisper-structure.png)
+
+#### Available models and languages
+
+|  Size  | Parameters | English-only model | Multilingual model | Required VRAM | Relative speed |
+|:------:|:----------:|:------------------:|:------------------:|:-------------:|:--------------:|
+|  tiny  |    39 M    |     `tiny.en`      |       `tiny`       |     ~1 GB     |      ~32x      |
+|  base  |    74 M    |     `base.en`      |       `base`       |     ~1 GB     |      ~16x      |
+| small  |   244 M    |     `small.en`     |      `small`       |     ~2 GB     |      ~6x       |
+| medium |   769 M    |    `medium.en`     |      `medium`      |     ~5 GB     |      ~2x       |
+| large  |   1550 M   |        N/A         |      `large`       |    ~10 GB     |       1x       |
+
+### Transformer T5
+
+Transformer T5 is a unified approach for all Natural Language Processing (NLP) tasks, using a text-to-text format, where the input and output are text strings. T5 is an encoder-decoder model that converts all NLP problems into this format. It is trained with "teacher forcing", requiring an input sequence and a target sequence for training. The model can be trained or tuned in a supervised or unsupervised manner.
+
+![Transformer T5 architecture](/static/images/transformer-t5-structure.png)
+
+![Transformer T5 architecture](/static/images/transformer-t5-tasks.png)
+
+## Demo
+
+To deploy this application, React Next.js was used for the frontend, and Python's FastAPI for the backend.
+
+The repository can be found at this [link](https://github.com/alejandropr5/briefly.git).
+
+<video controls>
+  <source
+    src="https://github-production-user-asset-6210df.s3.amazonaws.com/28362229/258559849-2124c81f-b99d-4431-839c-347e01a2616c.webm"
+    type="video/webm"
+  />
+</video>
