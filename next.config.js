@@ -65,14 +65,16 @@ module.exports = () => {
     eslint: {
       dirs: ['app', 'components', 'layouts', 'scripts'],
     },
+    basePath: '/portfolio',
+    output: 'export',
     images: {
       remotePatterns: [
         {
           protocol: 'https',
           hostname: 'picsum.photos',
-          unoptimized: true,
         },
       ],
+      unoptimized: true,
     },
     // async headers() {
     //   return [
@@ -92,12 +94,3 @@ module.exports = () => {
     },
   })
 }
-
-/**
- * @type {import('next').NextConfig}
- */
-const nextConfig = {
-  output: 'export',
-}
-
-module.exports = nextConfig
