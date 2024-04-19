@@ -24,7 +24,7 @@ const projectsData: Project[] = [
     description: `AI-powered audio briefly transcriptions:
     Seamlessly transform spoken words into written insights with AI-enhanced audio transcriptions.`,
     imgSrc: '/static/images/briefly/briefly.png',
-    href: '/blog/briefly-ai-powered-audio-briefly-transcriptions',
+    href: '/blog/ai-powered-audio-briefly-transcriptions',
   },
   {
     title: 'TheMonetPost',
