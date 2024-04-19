@@ -1,11 +1,10 @@
 import siteMetadata from '@/data/siteMetadata'
 import headerNavLinks from '@/data/headerNavLinks'
-import Logo from '../public/static/images/logo.png'
 import Link from './Link'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
 import SearchButton from './SearchButton'
-import ClientImage from './ClientImage'
+import Image from './Image'
 
 const Header = () => {
   return (
@@ -14,9 +13,12 @@ const Header = () => {
         <Link href="/" aria-label={siteMetadata.headerTitle}>
           <div className="flex items-center justify-between">
             <div className="mr-3 h-12 w-12">
-              <ClientImage
-                imageComponent={Logo}
-                description="A happy robot with AI written in his chest"
+              <Image
+                src="/static/images/logo.png"
+                alt="A happy robot with AI written in his chest"
+                className="h-12 w-12 object-cover object-center"
+                width={48}
+                height={48}
               />
             </div>
             {typeof siteMetadata.headerTitle === 'string' ? (
@@ -41,7 +43,7 @@ const Header = () => {
               {link.title}
             </Link>
           ))}
-        <SearchButton />
+        {/* <SearchButton /> */}
         <ThemeSwitch />
         <MobileNav />
       </div>
