@@ -1,62 +1,73 @@
 ---
-title: 'Briefly: AI-powered audio briefly transcriptions'
+title: 'Solving cryptograms with genetic algorithms'
 date: '2024-04-17'
 lastmod: '2024-04-17'
-tags: ['PLN', 'AI', 'audio', 'ml', 'transformer', 'Python', 'FastAPI', 'Nextjs', 'Tailwind']
+tags: ['cryptogram', 'genetic algorithm', 'AI']
 draft: false
 summary: 'Demo implementation of a web application utilizing FastAPI, Next.js, and Tailwind CSS, designed to briefly transcribe audio files efficiently using Whisper from OpenAI and Transformer T5 models.'
-images: ['/static/images/briefly/briefly.png']
+images: ['/static/images/gencipher/gencipher.png']
 ---
 
 # Introduction
 
-In educational, work or personal environments, we often face the difficulty of managing long audios, such as classes or meetings, whose content exceeds our available time to listen to them in their entirety. This results in a loss of valuable information and can affect the comprehensive understanding of the subject matter. “Briefly” addresses this problem by offering an effective solution that allows users to receive audio files, accurately transcribe them, and then generate automatic summaries.
-
-The app uses OpenAI's Whisper to perform high-quality transcriptions, ensuring accurate representation of spoken content in audio files. It then uses the Transformer T5 model to generate concise but informative summaries, capturing key points and highlighting essential information.
+Encryption plays a vital role in the digital world. One of the safest ways to protect important data from prying
+eyes is to encrypt it. This involves transforming each character into a completely random one, making the data
+unreadable during transmission. While encryption is a complex and important aspect of cybersecurity, I would
+like to delve into a specific but not so complex type; monoalphabetic substitution ciphers or better known as
+cryptograms. This exploration will allow us to understand the foundations of encryption and open the door to other
+fascinating concepts, such as genetic algorithms, a small subset of the field of artificial intelligence.
+So let me break down these topics for you!
 
 <TOCInline toc={props.toc} exclude="Introduction" />
 
-# Used models
+# Cryptogram
 
-## Whisper
+Let's start by defining what a cryptogram is. It is basically a puzzle in which an initially readable
+text (plaintext) is encrypted by replacing each letter with a different one from the same alphabet, which is
+why it is also called substitution cipher. While cryptograms may have been used in the past to hide personal
+secrets or for military purposes, today they are often so easy to decipher that they are mainly printed in
+newspapers and magazines for fun.
 
-[Whisper](https://github.com/openai/whisper) is a model developed by OpenAI designed specifically to perform audio transcription tasks. Its architecture consists of an encoder-decoder transformer that takes audio log-Mel spectrograms as input.
+# Cipher Key
 
-![Whisper Structure](/static/images/briefly/whisper-structure.png)  
+The cipher key is the most crucial concept in encryption: it is the key that gives us access to encrypt
+or decrypt the cryptogram. For simple substitution ciphers, the cipher key is a text string that indicates
+what letter our plaintext will be replaced with to encrypt it, or what letter our ciphertext will be replaced
+with to decrypt it. In this case, the cipher key contains all the letters of the alphabet, but in random order.
 
-### Available Models
+To encrypt plaintext, each letter is replaced with the corresponding letter of the cipher key in the original
+alphabet, such as:
 
-There are five available models offered by OpenAI, of which four are English-only. Each model differs from the other in terms of speed and accuracy.
+```
+ABCDEFGHIJKLMNOPQRSTUVWXYZ -> Original alphabet  
+DJTGIBOKWHMFYACSVRQNUZLXEP -> cipher key (alphabet with random order)
 
+Hello World -> plaintext  
+Wiffc Lcryg -> ciphertext
+```
 
-|  Size  | Parameters | English-only model | Multilingual model | Required VRAM | Relative speed |
-|:------:|:----------:|:------------------:|:------------------:|:-------------:|:--------------:|
-|  tiny  |    39 M    |     `tiny.en`      |       `tiny`       |     ~1 GB     |      ~32x      |
-|  base  |    74 M    |     `base.en`      |       `base`       |     ~1 GB     |      ~16x      |
-| small  |   244 M    |     `small.en`     |      `small`       |     ~2 GB     |      ~6x       |
-| medium |   769 M    |    `medium.en`     |      `medium`      |     ~5 GB     |      ~2x       |
-| large  |   1550 M   |        N/A         |      `large`       |    ~10 GB     |       1x       |
+# Genetic Algorithm
 
-## Transformer T5
+## Score
 
-Transformer T5, presented in [Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer](https://arxiv.org/pdf/1910.10683.pdf), is a unified approach for all Natural Language Processing (NLP) tasks, using a text-to-text format, where the input and output are text strings. “T5” refers to the core functionality of the model, which is called “**T**ext-**t**o-**T**ext **T**ransfer **T**ransformer”. 
+## Population
 
-T5 is an encoder-decoder model that converts all NLP problems into this format. It is trained with "teacher forcing", requiring an input sequence and a target sequence for training. The model can be trained or tuned in a supervised or unsupervised manner.
+## Mutation
 
-![Transformer T5 architecture](/static/images/briefly/transformer-t5-structure.png)
+### Insert
 
-### Available Tasks
+### Swap
 
-Below is a diagram of the text-to-text framework. Each task considered (including translation, question answering, and classification) is cast as feeding the model text as input and train it to generate a target text. This allows the same model, loss function, hyperparameters, etc. to be used in this diverse set of tasks.
+### Inversion
 
-![Transformer T5 tasks](/static/images/briefly/transformer-t5-tasks.png)
+### Scramble
 
-# Demo
+## Crossover
 
-To demonstrate how these two models work together, a demo web application was developed in which the user can enter audio files and a summarized transcript will be returned.
+### Order One
 
+### Partially Mapped
 
+### Cycle
 
-To develop this application it was divided into two main functions, backend and frontend. For the backend, an endpoint "/summarize" was created with use of FastAPI. For the frontend, Next.js and Tailwind CSS were used
-
-You can found the repository [here](https://github.com/alejandropr5/briefly).
+### Hill Climbing (Full) 
