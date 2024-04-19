@@ -15,21 +15,20 @@ const projectsData: Project[] = [
   },
   {
     title: 'Gencipher',
-    description: `Gencipher is a Web application for decoding cryptograms using genetic
-    algorithms.`,
-    imgSrc: '/static/images/gencipher.png',
+    description: `Gencipher is a web application tool that uses a genetic algorithm to solve monoalphabetic substitution ciphers.`,
+    imgSrc: '/static/images/gencipher/gencipher.png',
     href: 'https://gencipher.vercel.app/',
   },
   {
     title: 'Briefly',
-    description: `AI-powered audio briefly transcriptions.
+    description: `AI-powered audio briefly transcriptions:
     Seamlessly transform spoken words into written insights with AI-enhanced audio transcriptions.`,
-    imgSrc: '/static/images/briefly.png',
+    imgSrc: '/static/images/briefly/briefly.png',
     href: '/blog/briefly-ai-powered-audio-briefly-transcriptions',
   },
   {
     title: 'TheMonetPost',
-    description: `The Monet Post, the cozy corner of the internet where we explore the
+    description: `The cozy corner of the internet where you can explore the
     fascinating ties between the past and the present, all through the curious lens of a
     cat named Monet.`,
     imgSrc: '/static/images/the-monet-post.png',
