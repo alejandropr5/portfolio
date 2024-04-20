@@ -26,31 +26,137 @@ Let's start by defining what a cryptogram is. It is basically a puzzle in which 
 text (plaintext) is encrypted by replacing each letter with a different one from the same alphabet, which is
 why it is also called substitution cipher. While cryptograms may have been used in the past to hide personal
 secrets or for military purposes, today they are often so easy to decipher that they are mainly printed in
-newspapers and magazines for fun.
+newspapers and magazines just for fun.
 
 # Cipher Key
 
-The cipher key is the most crucial concept in encryption: it is the key that gives us access to encrypt
+The cipher key is the most crucial concept in encryption, it is the key that gives us access to encrypt
 or decrypt the cryptogram. For simple substitution ciphers, the cipher key is a text string that indicates
 what letter our plaintext will be replaced with to encrypt it, or what letter our ciphertext will be replaced
 with to decrypt it. In this case, the cipher key contains all the letters of the alphabet, but in random order.
 
 To encrypt plaintext, each letter is replaced with the corresponding letter of the cipher key in the original
-alphabet, such as:
+alphabet.
 
-```
-ABCDEFGHIJKLMNOPQRSTUVWXYZ -> Original alphabet  
-DJTGIBOKWHMFYACSVRQNUZLXEP -> cipher key (alphabet with random order)
+```py:Encryption
+ABCDEFGHIJKLMNOPQRSTUVWXYZ -> original alphabet  
+DJTGIBOKWHMFYACSVRQNUZLXEP -> cipherkey (random order alphabet)
 
 Hello World -> plaintext  
 Wiffc Lcryg -> ciphertext
 ```
 
+As I mentioned before, these types of cryptograms are quite simple to solve; You can just sit for a few minutes
+and start exchanging letters until you find meaningful answers. But the fun here, especially for those of us who
+enjoy programming, is automating this search for solutions. This is where a very interesting type of algorithm
+comes into play; genetic algorithms.
+
 # Genetic Algorithm
 
-## Score
+They are a small branch of artificial intelligence. Today we are quite familiar with AI, with its generative,
+classification and prediction models. But AI encompasses all algorithms that simulate biological behavior.
+In this case, a genetic algorithm is a model or abstraction of biological evolution based on Charles Darwin's
+theory of natural selection.
 
-## Population
+It was originally developed by John Holland and his collaborators, who were probably the first to use crossover,
+recombination, mutation and selection in the study of adaptive and artificial systems.
+
+Genetic algorithms mainly deal with optimization problems, where the objective is to minimize or maximize the
+objective function (fitness). This is achieved through iteration, starting with an initial population of potential
+solutions. Parents are then arbitrarily chosen for crossover, and their offspring are then affected by possible
+mutations. During this process, the most suitable offspring are selected by evaluating the quality of the solution
+they give.
+
+But who would be our parents and offspring in the case of cryptograms? Well, as we've seen before, it's the
+cipher key; the key that unlocks the solution and turns gibberish into readable text.
+
+## Fitness
+
+Let's talk about the importance of fitness in these algorithms. Without fitness, we'd just be iterating aimlessly,
+not knowing when our solution is optimal enough. For cryptograms, we first need a way to evaluate this fitness.
+We have to figure out how the algorithm can know on its own whether replacing letters in a text makes sense
+(i.e., is a possible solution).
+
+How do we achieve this? A simple way is to consider all sequences of n-letters (n-grams) in the resulting text
+and multiply them by the probability that each n-gram appears in the chosen language (e.g., English).
+
+### n-grams
+
+A n-gram consists of groups of n consecutive letters found in the text. For example, "Hello World"
+has the quadgrams (4-grams):
+
+$[HELL,\ ELLO,\ LLOW,\ LOWO,\ OWOR,\ WORL,\ ORLD]$
+
+The probability of this text would be calculated as follows:
+
+$P(Hello\ World) = P(HELL) \cdot P(ELLO) \cdot P(LLOW) \cdot P(LOWO) \cdot P(OWOR) \cdot P(WORL) \cdot P(ORLD)$
+
+Experimentally, using quadgrams to calculate fitness leads to better solutions with the genetic algorithm in most
+cases, except when the text is too short. In such cases, it is better to use smaller n-grams.
+
+Taking the calculated frequency of these n-grams extracted from Tolstoy's "War and Peace", which I found on this
+[site](http://practicalcryptography.com/cryptanalysis/text-characterisation/quadgrams), you simply
+have to Divide the frequency of each n-gram by the sum total of all n-gram frequencies to find its probability.
+But the n-grams found are so many that they make the total frequency of all n-grams too high, resulting in very
+small probabilities, and this makes the multiplication of these probabilities much, much smaller. Thus, the
+solution is to use the logarithmic function and convert these multiplications into additions:
+
+$\log{(P(Hello\ World))} = \log{(P(HELL))} + \log{(P(ELLO))} + \log{(P(LLOW))} + \log{(P(LOWO))} + \log{(P(OWOR))} + \log{(P(WORL))} + \log{(P(ORLD))}$
+
+Remembering the behavior of the logarithmic function curve, since the probabilities are numbers less
+than one, the logarithms will be negative numbers, and the rarer the n-gram, the more negative the logarithm will be.
+
+## Crossover
+
+Now, let's go to the first operation of the genetic algorithm. Crossover or recombination is the operation where we
+combine the genetic information of two parents to create an offspring.
+
+In this way, the genetic algorithm is all about iterating operations based on an initial population. This population
+consists of different cipherkeys that can be possible solutions to the encrypted text, so
+each one can have its respective fitness calculated. With this fitness we can select our parents. Just as in natural
+selection the fittest individuals are the most likely to mate, fitness allows us to randomly, but weightedly, choose
+our parents, giving priority to those with better fitness. So, we select two parents and obtain an offspring, then
+repeat this process until our number of offspring equals the number of individuals in the previous population.
+
+There are many types of crossover algorithms, let's discuss some of them.
+
+### Order One
+
+This is a very simple operation that is based on preserving the relative order in which elements occur.
+Let's go with an example.
+
+|          	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|
+|----------	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|
+| Parent 1 	| A 	| B 	| C 	| D 	| E 	| F 	| G 	| H 	| I 	| J 	| K 	| L 	| M 	| N 	| O 	| P 	| Q 	| R 	| S 	| T 	| U 	| V 	| W 	| X 	| Y 	| Z 	|
+| Parent 2 	| D 	| J 	| T 	| G 	| I 	| B 	| O 	| K 	| W 	| H 	| M 	| F 	| Y 	| A 	| C 	| S 	| V 	| R 	| Q 	| N 	| U 	| Z 	| L 	| X 	| E 	| P 	|
+|          	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|
+
+**Step 1**  
+Select a random set from parent 1 and copy this part to the child.
+
+|           	|   	|   	|   	|   	|   	|       	|       	|       	|       	|       	|       	|       	|       	|       	|       	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|
+|-----------	|---	|---	|---	|---	|---	|-------	|-------	|-------	|-------	|-------	|-------	|-------	|-------	|-------	|-------	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|
+| Parent 1  	| A 	| B 	| C 	| D 	| E 	| **F** 	| **G** 	| **H** 	| **I** 	| **J** 	| **K** 	| **L** 	| **M** 	| **N** 	| **O** 	|**P** 	|**Q** 	|**R** 	| S 	| T 	| U 	| V 	| W 	| X 	| Y 	| Z 	|
+| Parent 2  	| D 	| J 	| T 	| G 	| I 	| B     	| O     	| K     	| W     	| H     	| M     	| F     	| Y     	| A     	| C     	| S 	| V 	| R 	| Q 	| N 	| U 	| Z 	| L 	| X 	| E 	| P 	|
+| Child     	|   	|   	|   	|   	|   	| **F** 	| **G** 	| **H** 	| **I** 	| **J** 	| **K** 	| **L** 	| **M** 	| **N** 	| **O** 	|**P** 	|**Q** 	|**R** 	|   	|   	|   	|   	|   	|   	|   	|   	|
+|           	|   	|   	|   	|   	|   	|       	|       	|       	|       	|       	|       	|       	|       	|       	|       	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|
+
+**Step 2**  
+Copy the elements that are not in the child, from the second parent. Starting from the position of the first
+element that follows the copied set, and wrapping around the end.
+
+|          	|       	|       	|       	|       	|       	|       	|   	|   	|       	|   	|   	|   	|       	|       	|       	|       	|       	|   	|       	|       	|       	|       	|       	|       	|       	|       	|
+|----------	|-------	|-------	|-------	|-------	|-------	|-------	|---	|---	|-------	|---	|---	|---	|-------	|-------	|-------	|-------	|-------	|---	|-------	|-------	|-------	|-------	|-------	|-------	|-------	|-------	|
+| Parent 1 	| A     	| B     	| C     	| D     	| E     	| F     	| G 	| H 	| I     	| J 	| K 	| L 	| M     	| N     	| O     	| P     	| Q     	| R 	| S     	| T     	| U     	| V     	| W     	| X     	| Y     	| Z     	|
+| Parent 2 	| **D** 	| J     	| **T** 	| G     	| I     	| **B** 	| O 	| K 	| **W** 	| H 	| M 	| F 	| **Y** 	| **A** 	| **C** 	| **S** 	| **V** 	| R 	| Q     	| N     	| **U** 	| **Z** 	| L     	| **X** 	| **E** 	| P     	|
+| Child    	| **Y** 	| **A** 	| **C** 	| **S** 	| **V** 	| F     	| G 	| H 	| I     	| J 	| K 	| L 	| M     	| N     	| O     	| P     	| Q     	| R 	| **U** 	| **Z** 	| **X** 	| **E** 	| **D** 	| **T** 	| **B** 	| **W** 	|
+|          	|       	|       	|       	|       	|       	|       	|   	|   	|       	|   	|   	|   	|       	|       	|       	|       	|       	|   	|       	|       	|       	|       	|       	|       	|       	|       	|
+
+### Partially Mapped
+
+### Cycle
+
+### Hill Climbing (Full) 
 
 ## Mutation
 
@@ -62,12 +168,12 @@ Wiffc Lcryg -> ciphertext
 
 ### Scramble
 
-## Crossover
+# References
 
-### Order One
+For more information about these topics you can visit:
 
-### Partially Mapped
-
-### Cycle
-
-### Hill Climbing (Full) 
+- [Chapter 6 - Genetic Algorithms](https://www.sciencedirect.com/topics/engineering/genetic-algorithm), by Xin-She Yang, in Nature-Inspired Optimization Algorithms (Second Edition), 2021
+- [A Practical Introduction to Genetic Algorithms](https://youtube.com/playlist?list=PLea0WJq13cnARQILcbHUPINYLy1lOSmjH&si=fCCaJJIXUf_vufPv) - YouTube Playlist
+- [Quadgram Statistics as a Fitness Measure](http://practicalcryptography.com/cryptanalysis/text-characterisation/quadgrams/)
+- [Online Calculator: Text Fitness ](https://planetcalc.com/7959/)
+- [Genetic Algorithm Tutorial](https://www.rubicite.com/Tutorials/GeneticAlgorithms.aspx) 
