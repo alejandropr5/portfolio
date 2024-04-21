@@ -6,7 +6,7 @@ const siteMetadata = {
   description: '',
   language: 'en-us',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://alejandropr5.github.io/',
+  siteUrl: 'https://alejandropr5.github.io/portfolio/',
   siteRepo: 'https://github.com/alejandropr5/portfolio',
   siteLogo: '/static/images/logo.png',
   socialBanner: '/static/images/banner-yt.png',
