@@ -1,10 +1,10 @@
 ---
 title: 'Solving cryptograms with genetic algorithms'
 date: '2024-04-17'
-lastmod: '2024-04-17'
-tags: ['cryptogram', 'genetic algorithm', 'AI']
+lastmod: '2024-04-21'
+tags: ['cryptogram', 'genetic algorithm', 'AI', 'Python']
 draft: false
-summary: 'Demo implementation of a web application utilizing FastAPI, Next.js, and Tailwind CSS, designed to briefly transcribe audio files efficiently using Whisper from OpenAI and Transformer T5 models.'
+summary: 'An overview of cryptograms, an introduction to genetic algorithms and how you can use them to break cryptograms. I also show you a python implementation of everything discussed.'
 images: ['/static/images/gencipher/gencipher.png']
 ---
 
@@ -63,7 +63,7 @@ recombination, mutation and selection in the study of adaptive and artificial sy
 
 Genetic algorithms mainly deal with optimization problems, where the objective is to minimize or maximize the
 objective function (fitness). This is achieved through iteration, starting with an initial population of potential
-solutions. Parents are then arbitrarily chosen for crossover, and their offspring are then affected by possible
+solutions. Parents are then arbitrarily chosen for crossover, and their offspring (or child) are then affected by possible
 mutations. During this process, the most suitable offspring are selected by evaluating the quality of the solution
 they give.
 
@@ -85,7 +85,7 @@ and multiply them by the probability that each n-gram appears in the chosen lang
 A n-gram consists of groups of n consecutive letters found in the text. For example, "Hello World"
 has the quadgrams (4-grams):
 
-$[HELL,\ ELLO,\ LLOW,\ LOWO,\ OWOR,\ WORL,\ ORLD]$
+*HELL, ELLO, LLOW, LOWO, OWOR, WORL, ORLD*
 
 The probability of this text would be calculated as follows:
 
@@ -122,58 +122,114 @@ There are many types of crossover algorithms, let's discuss some of them.
 
 ### Order One
 
-This is a very simple operation that is based on preserving the relative order in which elements occur.
-Let's go with an example.
+This is a very simple operation that is based on preserving the relative order in which elements occur. Let's go with
+a very good explanation from Noureddin Sadawi.
 
-|          	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|
-|----------	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|
-| Parent 1 	| A 	| B 	| C 	| D 	| E 	| F 	| G 	| H 	| I 	| J 	| K 	| L 	| M 	| N 	| O 	| P 	| Q 	| R 	| S 	| T 	| U 	| V 	| W 	| X 	| Y 	| Z 	|
-| Parent 2 	| D 	| J 	| T 	| G 	| I 	| B 	| O 	| K 	| W 	| H 	| M 	| F 	| Y 	| A 	| C 	| S 	| V 	| R 	| Q 	| N 	| U 	| Z 	| L 	| X 	| E 	| P 	|
-|          	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|
+1. Select a random set from `parent 1` and copy this part to the `child`.
 
-**Step 1**  
-Select a random set from parent 1 and copy this part to the child.
-
-|           	|   	|   	|   	|   	|   	|       	|       	|       	|       	|       	|       	|       	|       	|       	|       	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|
-|-----------	|---	|---	|---	|---	|---	|-------	|-------	|-------	|-------	|-------	|-------	|-------	|-------	|-------	|-------	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|---	|
-| Parent 1  	| A 	| B 	| C 	| D 	| E 	| **F** 	| **G** 	| **H** 	| **I** 	| **J** 	| **K** 	| **L** 	| **M** 	| **N** 	| **O** 	|**P** 	|**Q** 	|**R** 	| S 	| T 	| U 	| V 	| W 	| X 	| Y 	| Z 	|
-| Parent 2  	| D 	| J 	| T 	| G 	| I 	| B     	| O     	| K     	| W     	| H     	| M     	| F     	| Y     	| A     	| C     	| S 	| V 	| R 	| Q 	| N 	| U 	| Z 	| L 	| X 	| E 	| P 	|
-| Child     	|   	|   	|   	|   	|   	| **F** 	| **G** 	| **H** 	| **I** 	| **J** 	| **K** 	| **L** 	| **M** 	| **N** 	| **O** 	|**P** 	|**Q** 	|**R** 	|   	|   	|   	|   	|   	|   	|   	|   	|
-|           	|   	|   	|   	|   	|   	|       	|       	|       	|       	|       	|       	|       	|       	|       	|       	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|   	|
-
-**Step 2**  
-Copy the elements that are not in the child, from the second parent. Starting from the position of the first
+2. Copy the elements that are not in the `child`, from `parent 2`. Starting from the position of the first
 element that follows the copied set, and wrapping around the end.
-
-|          	|       	|       	|       	|       	|       	|       	|   	|   	|       	|   	|   	|   	|       	|       	|       	|       	|       	|   	|       	|       	|       	|       	|       	|       	|       	|       	|
-|----------	|-------	|-------	|-------	|-------	|-------	|-------	|---	|---	|-------	|---	|---	|---	|-------	|-------	|-------	|-------	|-------	|---	|-------	|-------	|-------	|-------	|-------	|-------	|-------	|-------	|
-| Parent 1 	| A     	| B     	| C     	| D     	| E     	| F     	| G 	| H 	| I     	| J 	| K 	| L 	| M     	| N     	| O     	| P     	| Q     	| R 	| S     	| T     	| U     	| V     	| W     	| X     	| Y     	| Z     	|
-| Parent 2 	| **D** 	| J     	| **T** 	| G     	| I     	| **B** 	| O 	| K 	| **W** 	| H 	| M 	| F 	| **Y** 	| **A** 	| **C** 	| **S** 	| **V** 	| R 	| Q     	| N     	| **U** 	| **Z** 	| L     	| **X** 	| **E** 	| P     	|
-| Child    	| **Y** 	| **A** 	| **C** 	| **S** 	| **V** 	| F     	| G 	| H 	| I     	| J 	| K 	| L 	| M     	| N     	| O     	| P     	| Q     	| R 	| **U** 	| **Z** 	| **X** 	| **E** 	| **D** 	| **T** 	| **B** 	| **W** 	|
-|          	|       	|       	|       	|       	|       	|       	|   	|   	|       	|   	|   	|   	|       	|       	|       	|       	|       	|   	|       	|       	|       	|       	|       	|       	|       	|       	|
-
-### Partially Mapped
 
 ### Cycle
 
-### Hill Climbing (Full) 
+This operation consists of cycles between the two elements of the parent, this way each element comes together
+with its position. 
+
+1. Make parent 1 `p1` and parent 2 `p2`.
+2. Start a new cycle:
+    1. Select an element from `p1` whose position is empty in the `child` element.
+    1. Look at the element at the same position in `p2`.
+    1. Go to the position of the same element but in `p1`.
+    1. Place this item on the `child` in the same position.
+    1. Starting from this last element in `p1`, repeat steps 2.2 to 2.4 until you reach the first selected element.
+3. Swap parents (who was `p1` is now `p2`, and vice versa) and repeat the cycle from step 2.
+4. Repeat step 3 until the children has all its elements filled.
+
+### Partially Mapped
+
+With this operation, the child is created by taking a subsequence of parent 1 and trying to preserve the order
+and position of the elements of parent 2.
+
+1. Randomly select a segment of elements from `parent 1` and copy them directly to the `child`. Remember the positions
+of the segment elements.
+2. Search the same segment positions in `parent 2` and select each value that has not already been copied to the `child`.
+3. For each of these elements:
+    1. Find the element of `parent 1` at the same position.
+    1. Find this same element in `parent 2`.
+    1. If the position of this element in `parent 2` is within the original segment, go to step 3.1 using this value.
+    1. If the position is not inside the original segment, insert the element from step 3 into the `child` at this position.
+4. Copy any remaining elements from `parent 2` to `child`.
+
+### Hill Climbing
+
+Hill Climb is an optimization algorithm that belongs more to the local search family. The main idea is to make
+small changes to a possible solution and only keep the change if it improves the solution. In this way, changes
+continue to be made to the same solution until it can no longer be improved.
+
+To start, select two parents, compare their fitness and choose the best one, this will be our `parent 1`
+and the base for our child.
+
+1. Go through both parents, comparing element by element from left to right.
+2. If the element at position `n` of `parent 2` is different from the element at position `n` of `parent 1`, we replace
+the element at position `n` of `parent 1` with the element at position n of `parent 2`.
+3. This will cause the `n` element of `parent 2` to be repeated twice in `parent 1`. Then we look for that repeated
+element in `parent 1` that is not in position `n` and replace it with the original element that was in position `n` of the `parent 1`.
+4. Calculate the fitness of this new solution. If it is not greater than or equal to the previous fitness
+of `parent 1`, undo the change.
+5. Repeat this process until you have gone through all the `N` parent positions.
 
 ## Mutation
 
+The mutation is our final operation of the genetic algorithm, which occurs once the parents have crossed. This mutation
+involves changes in the same offspring, altering only one element. Biologically, mutation is what drives evolution; some
+offspring may undergo mutations that make them slightly different from the population, and perhaps this change gives them a
+slight survival advantage over others. As a result, these new mutated offspring are more likely to mate and pass their genetics
+on to new generations. The same principle applies in the world of algorithms; Mutations are necessary to prevent the algorithm
+from getting stuck in local minima. If the algorithm can't seem to improve on its current path, a mutation could put it on a
+different course that allows for further improvement.
+
 ### Insert
+
+This is a fairly simple type of mutation, where we insert one element next to another and thus preserve the order and adjacency
+information.
+
+1. Choose two elements randomly.
+2. Move the second element and insert it to the right of the first element, causing the other elements to shift to the right.
 
 ### Swap
 
+With this type of mutation, we can preserve most of the adjacency information.
+
+1. Pick two random elements
+2. Swap their positions.
+
 ### Inversion
 
+Next, we have inversion mutation. This mutation preserves most of the adjacency information while altering the order information.
+
+1. Pick two random elements. 
+2. Invert the segment between them.
+
 ### Scramble
+
+This mutation, as the previous one, preserves most of the adjacency information while altering the order information.
+
+1. Pick two random elements.
+2. Randomly rearrange the segment between them.
+
+# Genetic Decipher: a python implementation
+
+Based on everything explained in this post, I've put together a Python package, which you can check out on this GitHub
+[repository](https://github.com/alejandropr5/genetic-decipher).
 
 # References
 
 For more information about these topics you can visit:
 
-- [Chapter 6 - Genetic Algorithms](https://www.sciencedirect.com/topics/engineering/genetic-algorithm), by Xin-She Yang, in Nature-Inspired Optimization Algorithms (Second Edition), 2021
-- [A Practical Introduction to Genetic Algorithms](https://youtube.com/playlist?list=PLea0WJq13cnARQILcbHUPINYLy1lOSmjH&si=fCCaJJIXUf_vufPv) - YouTube Playlist
-- [Quadgram Statistics as a Fitness Measure](http://practicalcryptography.com/cryptanalysis/text-characterisation/quadgrams/)
-- [Online Calculator: Text Fitness ](https://planetcalc.com/7959/)
-- [Genetic Algorithm Tutorial](https://www.rubicite.com/Tutorials/GeneticAlgorithms.aspx) 
+- [Chapter 6 - Genetic Algorithms](https://www.sciencedirect.com/science/article/abs/pii/B9780128219867000135),
+by Xin-She Yang, in Nature-Inspired Optimization Algorithms (Second Edition), 2021.
+- [A Practical Introduction to Genetic Algorithms](https://youtube.com/playlist?list=PLea0WJq13cnARQILcbHUPINYLy1lOSmjH&si=fCCaJJIXUf_vufPv) - a
+YouTube playlist by Noureddin Sadawi.
+- [Quadgram Statistics as a Fitness Measure](http://practicalcryptography.com/cryptanalysis/text-characterisation/quadgrams/), from Practical Cryptography.
+- [Online Calculator: Text Fitness ](https://planetcalc.com/7959/), from Planetcalc.
+- [Genetic Algorithm Tutorial](https://www.rubicite.com/Tutorials/GeneticAlgorithms.aspx), from Rubicite Interactive.
