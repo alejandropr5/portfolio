@@ -1,6 +1,6 @@
 /** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
-  title: 'Alejandro Perdomo',
+  title: 'Alejandro Perdomo | Portfolio',
   author: 'Alejandro Perdomo',
   headerTitle: 'Alejandro Perdomo | Portfolio',
   description: '',
