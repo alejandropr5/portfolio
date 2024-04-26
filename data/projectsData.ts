@@ -8,14 +8,16 @@ interface Project {
 const projectsData: Project[] = [
   {
     title: 'LinkScribe',
-    description: `LinkScribe is a web application that utilizes natural language processing
+    description: `LinkScribe is a web application built with Next.js and FastAPI,
+    that utilizes natural language processing
     (NLP) and machine learning algorithms to classify and organize web links as bookmarks.`,
     imgSrc: '/static/images/linkscribe.png',
     href: 'https://linkscribe-alpha.vercel.app/',
   },
   {
     title: 'Gencipher',
-    description: `Gencipher is a web application tool that uses a genetic algorithm to solve monoalphabetic substitution ciphers.`,
+    description: `Gencipher is a web application tool built with Next.js and FastAPI,
+    that uses a genetic algorithm to solve monoalphabetic substitution ciphers.`,
     imgSrc: '/static/images/gencipher/gencipher.png',
     href: 'https://gencipher.vercel.app/',
   },
