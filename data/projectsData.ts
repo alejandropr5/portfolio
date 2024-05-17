@@ -8,7 +8,7 @@ interface Project {
 const projectsData: Project[] = [
   {
     title: 'LinkScribe',
-    description: `LinkScribe is a web application built with Next.js and FastAPI,
+    description: `LinkScribe is a web application built with Next.js, FastAPI and PostgreSQL,
     that utilizes natural language processing
     (NLP) and machine learning algorithms to classify and organize web links as bookmarks.`,
     imgSrc: '/static/images/linkscribe.png',
