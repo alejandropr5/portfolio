@@ -30,7 +30,7 @@ const projectsData: Project[] = [
   },
   {
     title: 'The Monet Post',
-    description: `The cozy corner of the internet where you can explore the
+    description: `My cousin's blog: The cozy corner of the internet where you can explore the
     fascinating ties between the past and the present, all through the curious lens of a
     cat named Monet.`,
     imgSrc: '/static/images/the-monet-post.png',
